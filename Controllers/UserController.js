@@ -1,4 +1,3 @@
-import Users from "../database/UsersSchema.js";
 import MongoService from "../Services/MongoService.js";
 import hashPassword from "../Services/HashPassword.js";
 import HashPassword from "../Services/HashPassword.js";

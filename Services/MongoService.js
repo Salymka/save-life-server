@@ -1,4 +1,5 @@
 import Users from "../database/UsersSchema.js";
+import Massage from "../database/AlertMassagesSchema.js";
 
 class MongoService{
 
@@ -27,6 +28,13 @@ class MongoService{
     async createUser(user){
         try{
             return Users.create(user);
+        }catch (e){
+            console.log(e)
+        }
+    }
+    async createAlertMessage(message){
+        try{
+            return Massage.create(message);
         }catch (e){
             console.log(e)
         }
