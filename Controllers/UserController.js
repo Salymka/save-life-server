@@ -38,12 +38,12 @@ class UserController{
 
     async deleteUser(req, res){
         try{
-            const {id} = req.params
-            console.log(id)
-            const user = await MongoService.findUser(id)
+            const {userId} = req.params
+            console.log(userId)
+            const user = await MongoService.findUser(userId)
             console.log(user)
             if(user){
-                const deletedUser = await MongoService.deleteUser(id)
+                const deletedUser = await MongoService.deleteUser(userId)
                 return res.status(200).send({message: "user delete", user: deletedUser})
             }
         }catch (e){
@@ -54,12 +54,12 @@ class UserController{
     async updateUserEmail(req, res){
         try{
             const {email} = req.body
-            const {id} = req.params
+            const {userId} = req.params
             const user = await MongoService.isExistForEmail(email)
             if(user) {
                 return res.status(500).send({message: `user with ${email} already exist` })
             }
-            const updateUser = await MongoService.updateEmail(id, email)
+            const updateUser = await MongoService.updateEmail(userId, email)
             return res.status(200).send({message: "user update", user: updateUser})
 
         }catch (e){

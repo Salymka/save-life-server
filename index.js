@@ -2,8 +2,10 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from "mongoose";
 import * as dotenv from 'dotenv'
-import userRouter from "./Routers/UserRouter.js";
-import alertMessageRouter from "./Routers/AlertMassageRouter.js";
+import UserRouter from "./Routers/UserRouter.js";
+import AlertMessageRouter from "./Routers/AlertMassageRouter.js";
+import OperatorsRouter from "./Routers/OperatorsRouter.js";
+import AdminRouter from "./Routers/AdminRouter.js";
 dotenv.config()
 const start = async function (){
     try {
@@ -14,8 +16,10 @@ const start = async function (){
 
         app.use(cors())
         app.use(express.json())
-        app.use('/users', userRouter)
-        app.use('/messages', alertMessageRouter)
+        app.use('/users', UserRouter)
+        app.use('/messages', AlertMessageRouter)
+        app.use('/operators', OperatorsRouter)
+        app.use('/admins', AdminRouter)
 
         app.listen(process.env.PORT, () => {
             console.log(`Example app listening on port ${process.env.PORT}`)

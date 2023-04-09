@@ -1,5 +1,8 @@
 import Users from "../database/UsersSchema.js";
 import Massage from "../database/AlertMassagesSchema.js";
+import Operator from "../database/OperatorsSchema.js";
+import OperatorsSchema from "../database/OperatorsSchema.js";
+import AdminsSchema from "../database/AdminsSchema.js";
 
 class MongoService{
 
@@ -32,13 +35,7 @@ class MongoService{
             console.log(e)
         }
     }
-    async createAlertMessage(message){
-        try{
-            return Massage.create(message);
-        }catch (e){
-            console.log(e)
-        }
-    }
+
     async deleteUser(userId){
         try{
             return Users.deleteOne({_id: userId});
@@ -49,7 +46,55 @@ class MongoService{
 
     async updateEmail(userId, email){
         try{
-            return Users.updateOne({_id: userId}, {email});
+            return Users.updateOne({_id: userId}, {email, updateDate: Date.now()});
+        }catch (e){
+            console.log(e)
+        }
+    }
+
+
+    async createOperator(operator){
+        try{
+            return Operator.create(operator);
+        }catch (e){
+            console.log(e)
+        }
+    }
+
+    async updateOperatorStatus(operatorID, status){
+        try{
+            return OperatorsSchema.updateOne({_id: operatorID}, {active: status, updateDate: Date.now()})
+        }catch (e){
+            console.log(e)
+        }
+    }
+    async createAlertMessage(message){
+        try{
+            return Massage.create(message);
+        }catch (e){
+            console.log(e)
+        }
+    }
+
+    async updateMessageStatus(messageId, status){
+        try{
+            return Massage.updateOne({_id: messageId}, {status})
+        }catch (e){
+            console.log(e)
+        }
+    }
+
+    async createAdmin(admin){
+        try{
+            return AdminsSchema.create(admin)
+        }catch (e){
+            console.log(e)
+        }
+    }
+
+    async getAdmin(login){
+        try{
+            return AdminsSchema.findOne({login: login});
         }catch (e){
             console.log(e)
         }
