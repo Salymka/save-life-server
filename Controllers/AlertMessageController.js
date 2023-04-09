@@ -5,9 +5,13 @@ import AlertMassagesSchema from "../database/AlertMassagesSchema.js";
 class AlertMessageController{
     async createAlertMessage(req, res){
         try{
-            const {title, comment} = req.body;
+            const {title, comment, photos} = req.body;
             const {userId} = req.params
-            const message = await MongoService.createAlertMessage({title, comment, author: userId})
+            console.log(title)
+            console.log(comment)
+            console.log(photos)
+            console.log(userId)
+            const message = await MongoService.createAlertMessage({title, comment, photos, author: userId})
             return res.send(message)
         }catch (e){
             console.log(e)
