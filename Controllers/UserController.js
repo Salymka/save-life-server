@@ -1,17 +1,19 @@
 import MongoService from "../Services/MongoService.js";
 import hashPassword from "../Services/HashPassword.js";
 import HashPassword from "../Services/HashPassword.js";
+import url from "url";
+const pathToStatic = url.fileURLToPath(new URL('../', import.meta.url)) + `public/`;
+
 class UserController{
     async createUser(req, res){
         try{
-            const {name, secondName, phone, location, email, password} = req.body
-            const checkPhone = await MongoService.isExistForPhone(phone);
+            const {name, secondName, email, password} = req.body
             const checkEmail = await MongoService.isExistForEmail(email);
-            if(checkPhone || checkEmail){
+            if(checkEmail){
                 return res.status(500).send({message: 'user exist'});
             }
             const hashedPassword = await hashPassword.hash(password);
-            const user = await MongoService.createUser({name, secondName, phone, email, location, password: hashedPassword})
+            const user = await MongoService.createUser({name, secondName, email, password: hashedPassword})
             return res.send({message: "user created", user})
         }catch (e){
             console.log(e)
@@ -21,16 +23,16 @@ class UserController{
 
     async loginUser(req, res){
         try{
-            const {login, password} = req.body
-            const user = await MongoService.isExistForPhone(login);
+            const {email, password} = req.body
+            const user = await MongoService.isExistForEmail(email);
             if(user){
                 const match = await HashPassword.matchPassword(password, user.password)
                 if(match){
                     return res.send(user)
                 }
-                return res.send({message: "invalid input"})
+                return res.send({message: "invalid password"})
             }
-            return res.send({message: "invalid input"})
+            return res.send({message: "invalid email"})
         }catch (e){
             console.log(e)
         }
