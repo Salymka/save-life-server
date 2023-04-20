@@ -7,9 +7,7 @@ import AlertMessageRouter from "./Routers/AlertMassageRouter.js";
 import OperatorsRouter from "./Routers/OperatorsRouter.js";
 import AdminRouter from "./Routers/AdminRouter.js";
 import bodyParser from 'body-parser';
-import multer from 'multer';
 import fileUpload from 'express-fileupload'
-const forms = multer();
 dotenv.config()
 const start = async function (){
     try {

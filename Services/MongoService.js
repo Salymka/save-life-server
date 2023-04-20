@@ -75,6 +75,21 @@ class MongoService{
             console.log(e)
         }
     }
+    async updateAlertMessage(messageId, status){
+        try{
+            return Massage.updateOne({_id: messageId}, {status});
+        }catch (e){
+            console.log(e)
+        }
+    }
+    async getMessages(userId){
+        try{
+            return Massage.find({author: userId});
+        }catch (e){
+            console.log(e)
+        }
+    }
+
 
     async updateMessageStatus(messageId, status){
         try{
