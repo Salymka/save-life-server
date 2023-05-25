@@ -1,5 +1,6 @@
 import MongoService from "../Services/MongoService.js";
 import newOperatorIdName from "../Services/OperatorIdName.js";
+import HashPassword from "../Services/HashPassword.js";
 
 
 class OperatorsController{
@@ -25,6 +26,23 @@ class OperatorsController{
             console.log(e)
         }
 
+    }
+    async loginOperator(req, res){
+        try{
+            const {idName, password} = req.body
+            const operator = await MongoService.findOperatorByIdName(idName);
+            if(operator){
+                console.log(operator)
+                const match = await HashPassword.matchPassword(password, operator.password)
+                if(match){
+                    return res.send(operator)
+                }
+                return res.send({message: "invalid password"})
+            }
+            return res.send({message: "invalid idNme"})
+        }catch (e){
+            console.log(e)
+        }
     }
 
 

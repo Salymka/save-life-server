@@ -3,6 +3,7 @@ import Massage from "../database/AlertMassagesSchema.js";
 import Operator from "../database/OperatorsSchema.js";
 import OperatorsSchema from "../database/OperatorsSchema.js";
 import AdminsSchema from "../database/AdminsSchema.js";
+import mongoose from "mongoose";
 
 class MongoService{
 
@@ -61,6 +62,14 @@ class MongoService{
         }
     }
 
+    async findOperatorByIdName(idName){
+        try{
+            return await Operator.findOne({idName});
+        }catch (e){
+            console.log(e)
+        }
+    }
+
     async updateOperatorStatus(operatorID, status){
         try{
             return OperatorsSchema.updateOne({_id: operatorID}, {active: status, updateDate: Date.now()})
@@ -85,6 +94,15 @@ class MongoService{
     async getMessages(userId){
         try{
             return Massage.find({author: userId});
+        }catch (e){
+            console.log(e)
+        }
+    }
+
+    async getRawMessage(){
+        try{
+            const mes = await Massage.find({status: 'notProcessed'});
+            return mes.pop()
         }catch (e){
             console.log(e)
         }

@@ -7,11 +7,11 @@ const pathToStatic = url.fileURLToPath(new URL('../public', import.meta.url))
 class AlertMessageController {
     async createAlertMessage(req, res) {
         try {
-            const {photos} = req.files
+            const photos = req?.files?.photos || []
             const {title, comment, alertType} = req.body
             const {userId} = req.params
             const photosPath = [];
-
+            console.log(photos, 'photos')
             const user = MongoService.findUser(userId)
             if (!user) {
                 return res.send({message: 'Unknown user'})
@@ -20,10 +20,9 @@ class AlertMessageController {
             if(!fs.existsSync(`${pathToStatic}/${userId}`)){
                 fs.mkdirSync(`${pathToStatic}/${userId}`)
             }
-
             const alertMessageDate = Date.now()
 
-            if (photos.length !== 0){
+            if (photos.length){
                 fs.mkdirSync(`${pathToStatic}/${userId}/${alertMessageDate}`);
                 [...photos].forEach((photo) => {
                     fs.writeFileSync(`${pathToStatic}/${userId}/${alertMessageDate}/${photo.name}`, photo.data)
@@ -32,7 +31,7 @@ class AlertMessageController {
             }
 
             const message = await MongoService.createAlertMessage({title, comment, photos: photosPath, author: userId, alertType, createDate: alertMessageDate})
-            return res.send({message: "Message Create", createdMessage: message})
+            return res.send({message: "Message Create", createdMessage: message, status: 'create'})
         } catch (e) {
             console.log(e)
             return res.send({message: "NO-OK"})

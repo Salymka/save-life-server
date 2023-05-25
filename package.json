@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon index.js",
+    "ws": "nodemon WebSocket/WebSocket.js",
     "serve": "node index.js"
   },
   "author": "Dmytro Prokopchuk",
