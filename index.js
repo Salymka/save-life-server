@@ -20,7 +20,7 @@ const start = async function (){
         app.use(bodyParser.json())
         app.use(bodyParser.urlencoded({ extended: true }));
         app.use(fileUpload({}));
-        app.use(express.static('./public'));
+        app.use(express.static('public'));
         app.use('/users', UserRouter);
         app.use('/messages', AlertMessageRouter);
         app.use('/operators', OperatorsRouter);

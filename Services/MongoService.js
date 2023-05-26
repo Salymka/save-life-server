@@ -86,7 +86,7 @@ class MongoService{
     }
     async updateAlertMessage(messageId, status){
         try{
-            return Massage.updateOne({_id: messageId}, {status});
+            return Massage.updateOne({_id: messageId}, {...status});
         }catch (e){
             console.log(e)
         }
@@ -101,8 +101,21 @@ class MongoService{
 
     async getRawMessage(){
         try{
-            const mes = await Massage.find({status: 'notProcessed'});
-            return mes.pop()
+            const mes = await Massage.findOneAndUpdate({status: 'notProcessed'}, {status: 'inProcessed'});
+            console.log(mes)
+            return mes
+
+        }catch (e){
+            console.log(e)
+        }
+    }
+
+    async findGlobalMessages(){
+        try{
+            const mes = await Massage.find({status: 'forGlobal'});
+            console.log(mes)
+            return mes
+
         }catch (e){
             console.log(e)
         }
@@ -112,6 +125,14 @@ class MongoService{
     async updateMessageStatus(messageId, status){
         try{
             return Massage.updateOne({_id: messageId}, {status})
+        }catch (e){
+            console.log(e)
+        }
+    }
+
+    async deleteMessage(messageId){
+        try{
+            return Massage.deleteOne({_id: messageId})
         }catch (e){
             console.log(e)
         }

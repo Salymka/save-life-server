@@ -7,8 +7,8 @@ const pathToStatic = url.fileURLToPath(new URL('../public', import.meta.url))
 class AlertMessageController {
     async createAlertMessage(req, res) {
         try {
-            const photos = req?.files?.photos || []
-            const {title, comment, alertType} = req.body
+            const photos = req?.files?.photos || [];
+            const {title, comment, alertType, location} = req.body
             const {userId} = req.params
             const photosPath = [];
             console.log(photos, 'photos')
@@ -30,7 +30,7 @@ class AlertMessageController {
                 });
             }
 
-            const message = await MongoService.createAlertMessage({title, comment, photos: photosPath, author: userId, alertType, createDate: alertMessageDate})
+            const message = await MongoService.createAlertMessage({title, comment, photos: photosPath, author: userId, alertType, createDate: alertMessageDate, location})
             return res.send({message: "Message Create", createdMessage: message, status: 'create'})
         } catch (e) {
             console.log(e)
@@ -59,6 +59,34 @@ class AlertMessageController {
             }
             const messages = await MongoService.getMessages(userId)
             return res.send(messages)
+        } catch (e) {
+            console.log(e)
+            return res.send({message: "NO-OK"})
+        }
+    }
+
+    async getGlobalMessages(req, res) {
+        try {
+            const messages = await MongoService.findGlobalMessages()
+            if (!messages.length) {
+                return res.send({message: 'NO ONE'})
+            }
+            return res.send(messages)
+        } catch (e) {
+            console.log(e)
+            return res.send({message: "NO-OK"})
+        }
+    }
+
+    async deleteUserMessages(req, res) {
+        try {
+            const {messageId} = req.params;
+            const deleteMessage = await MongoService.deleteMessage(messageId)
+            if (!deleteMessage) {
+                return res.send({message: 'Unknown message'})
+            }
+
+            return res.send(deleteMessage)
         } catch (e) {
             console.log(e)
             return res.send({message: "NO-OK"})
