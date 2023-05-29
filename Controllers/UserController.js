@@ -53,15 +53,20 @@ class UserController{
         }
     }
 
-    async updateUserEmail(req, res){
+    async updateUserInfo(req, res){
         try{
-            const {email} = req.body
-            const {userId} = req.params
-            const user = await MongoService.isExistForEmail(email)
-            if(user) {
-                return res.status(500).send({message: `user with ${email} already exist` })
+            const {email} = req.body;
+            const {userId} = req.params;
+            console.log(userId)
+            const user = await MongoService.findUser(userId);
+            if(!user) {
+                return res.status(500).send({message: `user doesn't exist` });
             }
-            const updateUser = await MongoService.updateEmail(userId, email)
+            if(user.email !== email){
+                const duplicateEmail = await MongoService.isExistForEmail(email);
+                if(duplicateEmail) return res.status(500).send({message: `User this Email already exist` });
+            }
+            const updateUser = await MongoService.updateUser(userId, req.body)
             return res.status(200).send({message: "user update", user: updateUser})
 
         }catch (e){

@@ -45,9 +45,9 @@ class MongoService{
         }
     }
 
-    async updateEmail(userId, email){
+    async updateUser(userId, params){
         try{
-            return Users.updateOne({_id: userId}, {email, updateDate: Date.now()});
+            return Users.updateOne({_id: userId}, {...params, updateDate: Date.now()});
         }catch (e){
             console.log(e)
         }
